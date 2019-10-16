@@ -1,0 +1,8 @@
+{
+    "python.pythonPath": "Z:\\Program Files\\Python\\Python37-32\\python.exe",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "cSpell.ignoreWords": [
+        "asdict"
+    ]
+}
