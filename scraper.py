@@ -4,11 +4,13 @@
 import requests
 import time
 from env import apiKey
+from data_parser import parseJson
+import os
 
 # Description: This is a class the contains the details of a restaurant like Name,
 #               address, phone, tags, rating and website.
 class Restaurant:
-    def __init__(self, name, address, phone, tags, rating, website, location, google_id):
+    def __init__(self, name, address, phone, tags, rating, website, location, google_id, photos):
         self.name = name
         self.address = address
         self.phone = phone
@@ -17,13 +19,54 @@ class Restaurant:
         self.website = website
         self.location = location
         self.google_id = google_id
+        self.photos = photos
     
     # Des: converts class to type dict
     def to_dict(self):
         return{'name': self.name, 'address': self.address, 'phone': self.phone,
-            'tags': self.tags, 'rating': self.rating, 'website': self.website, 'location': self.location, 'google_id': self.google_id}
+            'tags': self.tags, 'rating': self.rating, 'website': self.website, 'location': self.location, 'google_id': self.google_id, 'photos': self.photos}
 
 
+def getImages(inputFile):
+    photoCount = 0
+    paths = inputFile.split('/')
+    OUTPUT_FOLDER = ''
+
+    for i in range(0,len(paths)-1):
+        OUTPUT_FOLDER += paths[i]+'/'
+
+    OUTPUT_FOLDER += 'images/'
+
+    # create subfolder if it DNE
+    if not os.path.exists(OUTPUT_FOLDER):
+        os.mkdir(OUTPUT_FOLDER)
+
+    KEY = apiKey()
+    URLBASE = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key='+KEY+'&photoreference='
+
+    images = parseJson(inputFile)
+
+    for image in images:
+        google_id = image['google_id']
+
+            # create subfolder if it DNE
+        
+        for ref in image['photo_reference']:
+            if not os.path.exists(OUTPUT_FOLDER+google_id+'_'+ref+'.png'):
+                with open(OUTPUT_FOLDER+google_id+'_'+ref+'.png', 'wb') as handle:
+                    resp = requests.get(URLBASE+ref)
+
+                    if not resp.ok:
+                        print(resp)
+
+                    else:
+                        handle.write(resp.content)
+                        photoCount+=1
+
+            else:
+                print('skip')                   
+
+    return photoCount
 
 #Des: # makes a request to Google Places API to collect information about restaurants
 #        in the given radius centered around Downtown Vancouver
@@ -51,7 +94,6 @@ def getData(location, radius):
 
     r = requests.get(nearby_search)
     results = r.json()
-
 
     # If the key 'next_page_token' exists in our results then there is another page to our
     # query, must call for next page, update next_page to true so that we grab page token and store
@@ -109,9 +151,14 @@ def getData(location, radius):
             google_id = details.json()['result']['place_id']
         except:
             google_id = ''
+
+        try:
+            photos = details.json()['result']['photos']
+        except:
+            photos = ''
         
         #append the restaurant to the list
-        restaurantList.append(Restaurant(name, address, phone, tags, rating, website, location, google_id))
+        restaurantList.append(Restaurant(name, address, phone, tags, rating, website, location, google_id, photos))
 
         #check the status of the result
         #print(details.json()['status'])
@@ -182,8 +229,13 @@ def getData(location, radius):
             except:
                 google_id = ''
 
+            try:
+                photos = details.json()['result']['photos']
+            except:
+                photos = ''
+
             #append the restaurant to the list
-            restaurantList.append(Restaurant(name, address, phone, tags, rating, website, location, google_id))
+            restaurantList.append(Restaurant(name, address, phone, tags, rating, website, location, google_id, photos))
 
         # If the key 'next_page_token' exists in our results then there is another page to our
         # query, must call for next page, update next_page to true so that we grab page token and store

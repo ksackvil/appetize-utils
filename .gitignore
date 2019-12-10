@@ -1,5 +1,6 @@
 private_key.json
 env.py
+output_data/*
 
 # Created by https://www.gitignore.io/api/python
 # Edit at https://www.gitignore.io/?templates=python

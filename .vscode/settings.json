@@ -4,5 +4,6 @@
     "python.linting.enabled": true,
     "cSpell.ignoreWords": [
         "asdict"
-    ]
+    ],
+    "git.ignoreLimitWarning": true
 }

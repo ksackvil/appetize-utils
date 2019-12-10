@@ -1,5 +1,7 @@
 
-def parse(inputFile):
+import json
+
+def parseTxt(inputFile):
     try:
         with open(inputFile) as f:
             lineCount = 0
@@ -27,14 +29,35 @@ def parse(inputFile):
                 # Read next line
                 line = f.readline()
             
-            if(unit_tests(names, locations, radius)):
+            if(unitTestTxt(names, locations, radius)):
                 return(names, locations, radius)
             else:
                 print('ERROR: input text data mutated')
     except:
         print("ERROR: unable to open file.")
 
-def unit_tests(n, l, r):
+def parseJson(inputFile):
+    parsedList = []
+
+    try:
+        with open(inputFile) as f:
+            data = json.load(f)
+
+            for obj in data:
+                tempObj = {}
+                tempObj['photo_reference'] = []
+                tempObj['google_id'] = obj['google_id']
+
+                for photo in obj['photos']:
+                    tempObj['photo_reference'].append(photo['photo_reference'])
+
+                parsedList.append(tempObj)
+
+        return(parsedList)
+    except:
+        print("ERROR: unable to open file.")
+
+def unitTestTxt(n, l, r):
     array_length_test = False
     final_result = False
 
