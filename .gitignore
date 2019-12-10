@@ -1,7 +1,7 @@
 # User Generated Ignores
 private_key.json
 env.py
-output_data/*
+place-scrapper/output_data/*
 .DS_Store
 
 # Created by https://www.gitignore.io/api/python
@@ -9,7 +9,7 @@ output_data/*
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
-__pycache__/
+!**/__pycache__/
 *.py[cod]
 *$py.class
 
