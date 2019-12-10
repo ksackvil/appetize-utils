@@ -1,5 +1,4 @@
 # User Generated Ignores
-private_key.json
 **/env.py
 place-scrapper/output_data/*
 .DS_Store
