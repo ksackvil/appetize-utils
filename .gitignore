@@ -1,6 +1,8 @@
+# User Generated Ignores
 private_key.json
 env.py
 output_data/*
+.DS_Store
 
 # Created by https://www.gitignore.io/api/python
 # Edit at https://www.gitignore.io/?templates=python
