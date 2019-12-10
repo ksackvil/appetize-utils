@@ -42,7 +42,13 @@ class ProducerThread(threading.Thread):
 
             # Iterate each valid line of input file
             for index in range(0, len(outfile_name)):
-                # create subfolder if it DNE
+
+                # create output subfolder if it DNE
+                if not os.path.exists(OUTFILE_FOLDER):
+                    if DEVELOPER_LOGS: print('>> ALERT: '+OUTFILE_FOLDER+' does not exits. Creating folder.')
+                    os.mkdir(OUTFILE_FOLDER)
+
+                # create output subfolder if it DNE
                 if not os.path.exists(OUTFILE_FOLDER+subfolder):
                     if DEVELOPER_LOGS: print('>> ALERT: '+subfolder+' does not exits in ' + OUTFILE_FOLDER+'. Creating folder.')
                     os.mkdir(OUTFILE_FOLDER+subfolder)
