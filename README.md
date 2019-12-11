@@ -28,7 +28,7 @@ pip install -r requirements.txt
 
 ```
 def apiKey():
-    return("<YOUR-API-KEY")
+    return("<YOUR-API-KEY>")
 ```
 
 3. Get access to the env.json file from this repos maintainer and place it in `<pathToDir>/appetize-utils/translator`. Alternately you can create your own env.json and use your own private key. Note that this requires you to setup your own Google Cloud project with the 'Cloud Translation API' enabled, see [here](https://cloud.google.com/translate/docs/quickstarts) to get started. Follow the steps [here](https://cloud.google.com/translate/docs/basic/setup-basic) to get the private key as a json, rename this file to env.json place in project as described above.
