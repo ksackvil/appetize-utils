@@ -9,15 +9,18 @@ import queue
 # Global variables
 global PROCESS_ALIVE
 
+# ============================ CONFIGURABLE VARIABLES: START ================================== #
 OUTFILE_FOLDER = './output_data/'
 OUTFILE_EXT = '.json'
 INPUT_FOLDER = './input_data'
 DEVELOPER_LOGS = True               # controls console output
-OVERWITE_EXISTING = False           # if true exiting output files will be overwritten, default false (skips existing files)
+OVERWITE_EXISTING = False           # if true exiting output files will be overwritten, 
+                                    # default false (skips existing files)
 PROCESS_ALIVE = True                # controls if scrapping process is alive
 
 BUF_SIZE = 100                      # max number of elements in the queue
 q = queue.Queue(BUF_SIZE)           # data queue connecting producer and consumer
+# ============================ CONFIGURABLE VARIABLES: END ================================== #
 
 class ProducerThread(threading.Thread):
     def __init__(self, group=None, target=None, name=None,
