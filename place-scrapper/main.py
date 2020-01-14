@@ -142,9 +142,12 @@ def main():
 
     #  start thread classes
     p.start()
-    time.sleep(2)
+    time.sleep(1)
     c.start()
-    time.sleep(2)
+    time.sleep(1)
+
+    c.join()
+    p.join()
 
 if __name__ == "__main__":
     main()

@@ -10,7 +10,7 @@ import os
 # Description: This is a class the contains the details of a restaurant like Name,
 #               address, phone, tags, rating and website.
 class Restaurant:
-    def __init__(self, name, address, phone, tags, rating, website, location, google_id, photos):
+    def __init__(self, name, address, phone, tags, rating, website, location, google_id, photos, hours):
         self.name = name
         self.address = address
         self.phone = phone
@@ -20,11 +20,12 @@ class Restaurant:
         self.location = location
         self.google_id = google_id
         self.photos = photos
+        self.hours = hours
     
     # Des: converts class to type dict
     def to_dict(self):
         return{'name': self.name, 'address': self.address, 'phone': self.phone,
-            'tags': self.tags, 'rating': self.rating, 'website': self.website, 'location': self.location, 'google_id': self.google_id, 'photos': self.photos}
+            'tags': self.tags, 'rating': self.rating, 'website': self.website, 'location': self.location, 'google_id': self.google_id, 'photos': self.photos, 'hours': self.hours}
 
 
 def getImages(inputFile):
@@ -48,12 +49,11 @@ def getImages(inputFile):
 
     for image in images:
         google_id = image['google_id']
-
-            # create subfolder if it DNE
         
+        # create subfolder if it DNE
         for ref in image['photo_reference']:
-            if not os.path.exists(OUTPUT_FOLDER+google_id+'_'+ref+'.png'):
-                with open(OUTPUT_FOLDER+google_id+'_'+ref+'.png', 'wb') as handle:
+            if not os.path.exists(OUTPUT_FOLDER+google_id+'_'+ref[0:150]+'.png'):
+                with open(OUTPUT_FOLDER+google_id+'_'+ref[0:150]+'.png', 'wb') as handle:
                     resp = requests.get(URLBASE+ref)
 
                     if not resp.ok:
@@ -156,9 +156,14 @@ def getData(location, radius):
             photos = details.json()['result']['photos']
         except:
             photos = ''
+
+        try:
+            hours = details.json()['result']['opening_hours']['periods']
+        except:
+            hours = ''
         
         #append the restaurant to the list
-        restaurantList.append(Restaurant(name, address, phone, tags, rating, website, location, google_id, photos))
+        restaurantList.append(Restaurant(name, address, phone, tags, rating, website, location, google_id, photos, hours))
 
         #check the status of the result
         #print(details.json()['status'])
@@ -234,8 +239,14 @@ def getData(location, radius):
             except:
                 photos = ''
 
+            try:
+                hours = details.json()['result']['opening_hours']['periods']
+            except:
+                hours = ''
+
+
             #append the restaurant to the list
-            restaurantList.append(Restaurant(name, address, phone, tags, rating, website, location, google_id, photos))
+            restaurantList.append(Restaurant(name, address, phone, tags, rating, website, location, google_id, photos, hours))
 
         # If the key 'next_page_token' exists in our results then there is another page to our
         # query, must call for next page, update next_page to true so that we grab page token and store
